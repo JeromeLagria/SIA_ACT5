@@ -2,22 +2,46 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Traits\ApiResponser;
+use DB;
+
 Class UserController extends Controller {
-private $request;
-public function __construct(Request $request){
-$this->request = $request;
+    use ApiResponser;
+    private $request;
+    public function __construct(Request $request){
+    $this->request = $request;
+}
+public function getUsers(){
+    $users = DB::connection('mysql')
+    ->select("Select * from tbluser");
+    // return response()->json($users, 200);
+    return $this->successResponse($users);
 }
 // GET
-    public function getUsers(){
+    public function index(){
         $users = User::all();
-        return response()->json($users, 200);
+        
+        // return response()->json($users, 200);
+        return $this->successResponse($users);
     }
 // GET (ID)
     public function showUsers($id)
     {
-        //
-        return User::where('id','like','%'.$id.'%')->get();
+        $users = User::findOrFail($id);
+        return $this->successResponse($users);
+    
+    // old code
+    /*
+    $user = User::where('userid', $id)->first();
+    if($user){
+    return $this->successResponse($user);
     }
+    {
+    return $this->errorResponse('User ID Does Not Exists',
+    Response::HTTP_NOT_FOUND);
+    }
+    */
+}
 // ADD 
     public function addUsers(Request $request ){
         $rules = [
@@ -26,8 +50,8 @@ $this->request = $request;
         'Customer_Favorite_Color' => 'required|max:20',
         ];
         $this->validate($request,$rules);
-        $user = User::create($request->all());
-        return $user;
+        $users = User::create($request->all());
+        return $this->successResponse($users);
 // UPDATE
 }
     public function updateUsers(Request $request,$id)
