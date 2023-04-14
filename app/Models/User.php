@@ -3,8 +3,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 class User extends Model{
 protected $table = 'customers';
+public $timestamps = false;
 // column sa table
 protected $fillable = [
-'Customers_FirstName', 'Customers_LastName', 'Customers_PhoneNum'
+'Customer_FirstName', 'Customer_LastName', 'Customer_Favorite_Color'
 ];
 }
