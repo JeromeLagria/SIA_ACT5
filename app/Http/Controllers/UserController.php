@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\User;
 use App\Traits\ApiResponser;
 use DB;
@@ -48,10 +49,11 @@ public function getUsers(){
         'Customer_FirstName' => 'required|max:20',
         'Customer_LastName' => 'required|max:20',
         'Customer_Favorite_Color' => 'required|max:20',
+        'Customer_Age' => 'required|max:100',
         ];
         $this->validate($request,$rules);
         $users = User::create($request->all());
-        return $this->successResponse($users);
+        return $this->successResponse($user, RESPONSE::HTTP_CREATED);
 // UPDATE
 }
     public function updateUsers(Request $request,$id)
@@ -60,6 +62,7 @@ public function getUsers(){
         'Customer_FirstName' => 'required|max:20',
         'Customer_LastName' => 'required|max:20',
         'Customer_Favorite_Color' => 'required|max:20',
+        'Customer_Age' => 'required|max:100'
     ];
     $this->validate($request, $rules);
     $user = User::findOrFail($id);
